@@ -1,5 +1,4 @@
 #include <QCoreApplication>
-#include <QDebug>
 #include <QCommandLineParser>
 #include <QFileInfo>
 #include <QDir>
@@ -24,11 +23,8 @@ int main(int argc, char *argv[])
 
     if (args.empty())
     {
-        qCritical() << "Input file dosn't set.";
-
-        QTimer::singleShot(0, &app, SLOT(quit()));
-        app.exec();
-        return EXIT_FAILURE;
+        fprintf(stderr, "%s\n", qPrintable("Input file doesn't set."));
+        ::exit(EXIT_FAILURE);
     }
     QString inputFile = args.at(0),
             outputFile;
