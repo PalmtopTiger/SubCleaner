@@ -1,3 +1,3 @@
 # SubCleaner
 
-This program strips fonts and graphics from SSA/ASS files.
+This program strips fonts, graphics and other useless information from SSA/ASS files.
