@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QTextCodec>
+#include <QSet>
 #include "cleaner.h"
 #include "script.h"
 
@@ -47,23 +48,44 @@ void Cleaner::run()
     // Strip comments
     if (_flags.testFlag(StripComments))
     {
-        foreach (Script::Line::Named *line, script.header.content) {
+        foreach (Script::Line::Named* const line, script.header.content) {
             line->clearBefore();
         }
         script.header.clearAfter();
 
-        foreach (Script::Line::Style *line, script.styles.content) {
+        foreach (Script::Line::Style* const line, script.styles.content) {
             line->clearBefore();
         }
         script.styles.clearAfter();
 
-        foreach (Script::Line::Event *line, script.events.content) {
+        foreach (Script::Line::Event* const line, script.events.content) {
             line->clearBefore();
         }
         script.events.clearAfter();
 
         script.clearBefore();
         script.clearAfter();
+    }
+
+    // Strip info lines
+    if (_flags.testFlag(StripStyleInfo))
+    {
+        // ScriptType добавляется всегда
+        QSet<QString> importantLines = (QSet<QString>()
+                                        << QString("WrapStyle").toLower()
+                                        << QString("PlayResX").toLower()
+                                        << QString("PlayResY").toLower()
+                                        << QString("ScaledBorderAndShadow").toLower()
+                                        << QString("YCbCr Matrix").toLower());
+
+        QList<Script::Line::Named*> headerContent = script.header.content;
+        foreach (Script::Line::Named* const line, headerContent) {
+            if ( !importantLines.contains(line->name().toLower()) )
+            {
+                script.header.content.removeOne(line);
+                delete line;
+            }
+        }
     }
 
     // Strip fonts and graphics

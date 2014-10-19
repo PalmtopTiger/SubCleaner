@@ -5,8 +5,6 @@
 #include <QTimer>
 #include "cleaner.h"
 
-#include <QDebug>
-
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
@@ -23,7 +21,10 @@ int main(int argc, char *argv[])
 
     QCommandLineOption stripComments(QStringList() << "c" << "strip-comments",
                                      "Strip comments.");
+    QCommandLineOption stripStyleInfo(QStringList() << "i" << "strip-info",
+                                      "Strip useless lines from info section.");
     parser.addOption(stripComments);
+    parser.addOption(stripStyleInfo);
 
     parser.process(app);
     const QStringList args = parser.positionalArguments();
@@ -55,6 +56,7 @@ int main(int argc, char *argv[])
 
     Cleaner::Options flags;
     if ( parser.isSet(stripComments) )  flags |= Cleaner::StripComments;
+    if ( parser.isSet(stripStyleInfo) ) flags |= Cleaner::StripStyleInfo;
 
     Cleaner *cleaner = new Cleaner(&app, inputFile, outputFile, flags);
     QObject::connect(cleaner, SIGNAL(finished()), &app, SLOT(quit()));

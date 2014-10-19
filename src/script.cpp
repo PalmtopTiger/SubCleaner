@@ -105,6 +105,11 @@ void Named::clearBefore()
     _before.clear();
 }
 
+QString Named::name() const
+{
+    return _name;
+}
+
 QString Named::generate(const ScriptType type, const QString& value) const
 {
     QString result;
@@ -468,10 +473,11 @@ bool ParseSSA(QTextStream& in, Script& script)
             }
 
             // Спасаем неизвестное
-            if (SEC_UNKNOWN == state)
+            //! @todo: временно отключено - мусор ломает формат
+            /*if (SEC_UNKNOWN == state)
             {
                 tempStrList.append(line);
-            }
+            }*/
             break;
 
         case SEC_HEADER:

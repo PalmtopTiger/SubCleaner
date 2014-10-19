@@ -9,7 +9,8 @@ class Cleaner : public QObject
     Q_OBJECT
 public:
     enum Option {
-        StripComments  = 1 << 0
+        StripComments  = 1 << 0,
+        StripStyleInfo = 1 << 1
     };
     Q_DECLARE_FLAGS(Options, Option)
 

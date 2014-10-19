@@ -5,7 +5,6 @@
 #include <QString>
 #include <QStringList>
 #include <QTextStream>
-#include <QDebug>
 
 
 namespace Script
@@ -65,6 +64,7 @@ public:
     {}
 
     void clearBefore();
+    QString name() const;
     QString generate(const ScriptType type) const;
 
 protected:
