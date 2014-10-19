@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Unlimited Web Works");
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("This program strips fonts and graphics from SSA/ASS files.");
+    parser.setApplicationDescription("This program strips fonts, graphics and other useless information from SSA/ASS files.");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("input", "Input subtitle file.");
