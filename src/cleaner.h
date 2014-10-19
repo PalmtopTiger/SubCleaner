@@ -8,7 +8,12 @@ class Cleaner : public QObject
 {
     Q_OBJECT
 public:
-    explicit Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile);
+    enum Option {
+        StripComments  = 1 << 0
+    };
+    Q_DECLARE_FLAGS(Options, Option)
+
+    explicit Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile, const Options flags = 0);
 
 signals:
     void finished();
@@ -19,6 +24,8 @@ public slots:
 private:
     QFile _inputFile;
     QFile _outputFile;
+    Options _flags;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(Cleaner::Options)
 
 #endif // CLEANER_H

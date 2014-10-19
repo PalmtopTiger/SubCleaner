@@ -5,6 +5,8 @@
 #include <QTimer>
 #include "cleaner.h"
 
+#include <QDebug>
+
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
@@ -18,10 +20,15 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.addPositionalArgument("input", "Input subtitle file.");
     parser.addPositionalArgument("output", "Output subtitle file.");
+
+    QCommandLineOption stripComments(QStringList() << "c" << "strip-comments",
+                                     "Strip comments.");
+    parser.addOption(stripComments);
+
     parser.process(app);
     const QStringList args = parser.positionalArguments();
 
-    if (args.empty())
+    if (args.isEmpty())
     {
         fprintf(stderr, "%s\n", qPrintable("Input file doesn't set."));
         ::exit(EXIT_FAILURE);
@@ -46,7 +53,10 @@ int main(int argc, char *argv[])
         outputFile = fileInfo.dir().filePath(name.join('.'));
     }
 
-    Cleaner *cleaner = new Cleaner(&app, inputFile, outputFile);
+    Cleaner::Options flags;
+    if ( parser.isSet(stripComments) )  flags |= Cleaner::StripComments;
+
+    Cleaner *cleaner = new Cleaner(&app, inputFile, outputFile, flags);
     QObject::connect(cleaner, SIGNAL(finished()), &app, SLOT(quit()));
     QTimer::singleShot(0, cleaner, SLOT(run()));
     return app.exec();

@@ -3,10 +3,11 @@
 #include "cleaner.h"
 #include "script.h"
 
-Cleaner::Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile) :
+Cleaner::Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile, const Options flags) :
     QObject(parent),
     _inputFile(inputFile),
-    _outputFile(outputFile)
+    _outputFile(outputFile),
+    _flags(flags)
 {}
 
 void Cleaner::run()
@@ -42,6 +43,28 @@ void Cleaner::run()
         return;
     }
     _inputFile.close();
+
+    // Strip comments
+    if (_flags.testFlag(StripComments))
+    {
+        foreach (Script::Line::Named *line, script.header.content) {
+            line->clearBefore();
+        }
+        script.header.clearAfter();
+
+        foreach (Script::Line::Style *line, script.styles.content) {
+            line->clearBefore();
+        }
+        script.styles.clearAfter();
+
+        foreach (Script::Line::Event *line, script.events.content) {
+            line->clearBefore();
+        }
+        script.events.clearAfter();
+
+        script.clearBefore();
+        script.clearAfter();
+    }
 
     // Strip fonts and graphics
     script.fonts.clear();

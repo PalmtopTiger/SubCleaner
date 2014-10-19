@@ -64,6 +64,7 @@ public:
         _before(before)
     {}
 
+    void clearBefore();
     QString generate(const ScriptType type) const;
 
 protected:
@@ -173,11 +174,16 @@ public:
         qDeleteAll(content);
     }
 
+    void clearAfter()
+    {
+        _after.clear();
+    }
+
     void clear()
     {
         qDeleteAll(content);
         content.clear();
-        _after.clear();
+        clearAfter();
     }
 
     bool isEmpty() const
@@ -305,6 +311,8 @@ public:
     Section<Line::Base>   fonts;
     Section<Line::Base>   graphics;
 
+    void clearBefore();
+    void clearAfter();
     void clear();
     void appendBefore(const QStringList& before);
     void appendAfter(const QStringList& after);

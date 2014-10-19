@@ -100,6 +100,11 @@ QString Base::generate(const ScriptType type) const
 }
 
 // Простейшая строка с двоеточием
+void Named::clearBefore()
+{
+    _before.clear();
+}
+
 QString Named::generate(const ScriptType type, const QString& value) const
 {
     QString result;
@@ -276,6 +281,16 @@ QString Event::generate(const ScriptType type) const
 }
 
 // Скрипт
+void Script::clearBefore()
+{
+    _before.clear();
+}
+
+void Script::clearAfter()
+{
+    _after.clear();
+}
+
 void Script::clear()
 {
     header.clear();
@@ -283,8 +298,8 @@ void Script::clear()
     events.clear();
     fonts.clear();
     graphics.clear();
-    _before.clear();
-    _after.clear();
+    clearBefore();
+    clearAfter();
 }
 
 void Script::appendBefore(const QStringList& before)
