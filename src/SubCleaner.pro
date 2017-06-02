@@ -4,21 +4,21 @@
 #
 #-------------------------------------------------
 
-QT       += core
-
-QT       -= gui
-
-TARGET = SubCleaner
-CONFIG   += console
-CONFIG   -= app_bundle
-
 TEMPLATE = app
 
+QT += core
+QT -= gui
 
-SOURCES += main.cpp \
+CONFIG += console
+CONFIG -= app_bundle
+
+SOURCES += \
+    main.cpp \
     script.cpp \
     cleaner.cpp
 
 HEADERS += \
     script.h \
     cleaner.h
+
+TARGET = SubCleaner
