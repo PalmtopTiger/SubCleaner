@@ -14,7 +14,7 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    explicit Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile, const Options flags = 0);
+    explicit Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile, const Options flags = nullptr);
 
 signals:
     void finished();
