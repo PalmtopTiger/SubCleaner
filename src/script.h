@@ -163,7 +163,7 @@ public:
         _sectionType(original._sectionType),
         _after(original._after)
     {
-        foreach (const T* const e, original.content) content.append(new T(*e));
+        for (const T* const e : original.content) content.append(new T(*e));
     }
     Section(const SectionType sectionType) :
         _sectionType(sectionType)
@@ -250,7 +250,7 @@ public:
                 break;
             }
 
-            foreach (T* const e, content)
+            for (const T* const e : qAsConst(content))
             {
                 result.append( e->generate(type) );
                 result.append("\n");

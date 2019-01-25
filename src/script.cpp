@@ -29,10 +29,10 @@ uint StrToTime(const QString& str, const ScriptType type)
 {
     // В этой функции мы пытаемся получить хоть какое-то время из строки.
     // Считаем, что чисел может недоставать только с конца (миллисекунды и далее).
-    uint hour    = 0,
-            min  = 0,
-            sec  = 0,
-            msec = 0;
+    uint hour = 0,
+         min  = 0,
+         sec  = 0,
+         msec = 0;
     QStringList list = str.split(QChar(':'));
 
     // Часы
@@ -74,10 +74,10 @@ uint StrToTime(const QString& str, const ScriptType type)
 
 QString TimeToStr(const uint time, const ScriptType type)
 {
-    uint hour = time / 3600000u,
-            min  = time / 60000u % 60u,
-            sec  = time / 1000u  % 60u,
-            msec = time % 1000u;
+    const uint hour = time / 3600000u,
+               min  = time / 60000u % 60u,
+               sec  = time / 1000u  % 60u,
+               msec = time % 1000u;
 
     QString ret;
     if (SCR_ASS == type || SCR_SSA == type)

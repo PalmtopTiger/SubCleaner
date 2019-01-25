@@ -22,7 +22,7 @@ void Cleaner::run()
     }
 
     QTextStream inputStream(&_inputFile);
-    Script::ScriptType scriptType = Script::DetectFormat(inputStream);
+    const Script::ScriptType scriptType = Script::DetectFormat(inputStream);
     Script::Script script;
     switch (scriptType)
     {
@@ -48,17 +48,17 @@ void Cleaner::run()
     // Strip comments
     if (_flags.testFlag(StripComments))
     {
-        foreach (Script::Line::Named* const line, script.header.content) {
+        for (Script::Line::Named* const line : qAsConst(script.header.content)) {
             line->clearBefore();
         }
         script.header.clearAfter();
 
-        foreach (Script::Line::Style* const line, script.styles.content) {
+        for (Script::Line::Style* const line : qAsConst(script.styles.content)) {
             line->clearBefore();
         }
         script.styles.clearAfter();
 
-        foreach (Script::Line::Event* const line, script.events.content) {
+        for (Script::Line::Event* const line : qAsConst(script.events.content)) {
             line->clearBefore();
         }
         script.events.clearAfter();
@@ -71,18 +71,19 @@ void Cleaner::run()
     if (_flags.testFlag(StripStyleInfo))
     {
         // ScriptType добавляется всегда
-        QSet<QString> importantLines = (QSet<QString>()
-                                        << QString("WrapStyle").toLower()
-                                        << QString("PlayResX").toLower()
-                                        << QString("PlayResY").toLower()
-                                        << QString("ScaledBorderAndShadow").toLower()
-                                        << QString("YCbCr Matrix").toLower());
+        const QSet<QString> importantLines = (QSet<QString>()
+            << QString("WrapStyle").toLower()
+            << QString("PlayResX").toLower()
+            << QString("PlayResY").toLower()
+            << QString("ScaledBorderAndShadow").toLower()
+            << QString("YCbCr Matrix").toLower());
 
-        QList<Script::Line::Named*> headerContent = script.header.content;
-        foreach (Script::Line::Named* const line, headerContent) {
+        QMutableListIterator<Script::Line::Named*> lineIt(script.header.content);
+        while (lineIt.hasNext()) {
+            const Script::Line::Named* const line = lineIt.next();
             if ( !importantLines.contains(line->name().toLower()) )
             {
-                script.header.content.removeOne(line);
+                lineIt.remove();
                 delete line;
             }
         }

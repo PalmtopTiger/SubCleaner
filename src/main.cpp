@@ -19,10 +19,10 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument("input", "Input subtitle file.");
     parser.addPositionalArgument("output", "Output subtitle file.");
 
-    QCommandLineOption stripComments(QStringList() << "c" << "strip-comments",
-                                     "Strip comments.");
-    QCommandLineOption stripStyleInfo(QStringList() << "i" << "strip-info",
-                                      "Strip useless lines from info section.");
+    const QCommandLineOption stripComments(QStringList() << "c" << "strip-comments",
+                                           "Strip comments.");
+    const QCommandLineOption stripStyleInfo(QStringList() << "i" << "strip-info",
+                                            "Strip useless lines from info section.");
     parser.addOption(stripComments);
     parser.addOption(stripStyleInfo);
 
@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "%s\n", qPrintable("Input file doesn't set."));
         ::exit(EXIT_FAILURE);
     }
-    QString inputFile = args.at(0),
-            outputFile;
+    const QString inputFile = args.at(0);
+    QString outputFile;
 
     if (args.length() >= 2)
     {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        QFileInfo fileInfo(inputFile);
+        const QFileInfo fileInfo(inputFile);
         QStringList name;
         name << fileInfo.baseName()
              << "clean";
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     if ( parser.isSet(stripComments) )  flags |= Cleaner::StripComments;
     if ( parser.isSet(stripStyleInfo) ) flags |= Cleaner::StripStyleInfo;
 
-    Cleaner *cleaner = new Cleaner(&app, inputFile, outputFile, flags);
+    const Cleaner *cleaner = new Cleaner(&app, inputFile, outputFile, flags);
     QObject::connect(cleaner, SIGNAL(finished()), &app, SLOT(quit()));
     QTimer::singleShot(0, cleaner, SLOT(run()));
     return app.exec();
