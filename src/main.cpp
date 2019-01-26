@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
     if ( parser.isSet(stripComments) )  flags |= Cleaner::StripComments;
     if ( parser.isSet(stripStyleInfo) ) flags |= Cleaner::StripStyleInfo;
 
-    const Cleaner *cleaner = new Cleaner(&app, inputFile, outputFile, flags);
-    QObject::connect(cleaner, SIGNAL(finished()), &app, SLOT(quit()));
-    QTimer::singleShot(0, cleaner, SLOT(run()));
+    const Cleaner cleaner(&app, inputFile, outputFile, flags);
+    QObject::connect(&cleaner, &Cleaner::finished, &app, &QCoreApplication::quit);
+    QTimer::singleShot(0, &cleaner, &Cleaner::run);
     return app.exec();
 }

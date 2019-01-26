@@ -7,6 +7,7 @@
 class Cleaner : public QObject
 {
     Q_OBJECT
+
 public:
     enum Option {
         StripComments  = 1 << 0,
