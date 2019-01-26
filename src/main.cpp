@@ -1,9 +1,9 @@
+#include "cleaner.h"
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QFileInfo>
 #include <QDir>
 #include <QTimer>
-#include "cleaner.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,10 +19,8 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument("input", "Input subtitle file.");
     parser.addPositionalArgument("output", "Output subtitle file.");
 
-    const QCommandLineOption stripComments(QStringList() << "c" << "strip-comments",
-                                           "Strip comments.");
-    const QCommandLineOption stripStyleInfo(QStringList() << "i" << "strip-info",
-                                            "Strip useless lines from info section.");
+    const QCommandLineOption stripComments({"c", "strip-comments"}, "Strip comments.");
+    const QCommandLineOption stripStyleInfo({"i", "strip-info"}, "Strip useless lines from info section.");
     parser.addOption(stripComments);
     parser.addOption(stripStyleInfo);
 
@@ -44,14 +42,9 @@ int main(int argc, char *argv[])
     else
     {
         const QFileInfo fileInfo(inputFile);
-        QStringList name;
-        name << fileInfo.baseName()
-             << "clean";
-        if (!fileInfo.completeSuffix().isEmpty())
-        {
-            name << fileInfo.completeSuffix();
-        }
-        outputFile = fileInfo.dir().filePath(name.join('.'));
+        QStringList fileName = {fileInfo.completeBaseName(), "clean", fileInfo.suffix()};
+        fileName.removeAll(""); // На случай пустого суффикса
+        outputFile = fileInfo.dir().filePath(fileName.join('.'));
     }
 
     Cleaner::Options flags;

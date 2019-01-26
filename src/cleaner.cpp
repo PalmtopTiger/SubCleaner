@@ -1,8 +1,8 @@
+#include "cleaner.h"
+#include "script.h"
 #include <QCoreApplication>
 #include <QTextCodec>
 #include <QSet>
-#include "cleaner.h"
-#include "script.h"
 
 Cleaner::Cleaner(QObject *parent, const QString &inputFile, const QString &outputFile, const Options flags) :
     QObject(parent),
@@ -71,12 +71,13 @@ void Cleaner::run()
     if (_flags.testFlag(StripStyleInfo))
     {
         // ScriptType добавляется всегда
-        const QSet<QString> importantLines = (QSet<QString>()
-            << QString("WrapStyle").toLower()
-            << QString("PlayResX").toLower()
-            << QString("PlayResY").toLower()
-            << QString("ScaledBorderAndShadow").toLower()
-            << QString("YCbCr Matrix").toLower());
+        const QSet<QString> importantLines = {
+            QString("WrapStyle").toLower(),
+            QString("PlayResX").toLower(),
+            QString("PlayResY").toLower(),
+            QString("ScaledBorderAndShadow").toLower(),
+            QString("YCbCr Matrix").toLower()
+        };
 
         QMutableListIterator<Script::Line::Named*> lineIt(script.header.content);
         while (lineIt.hasNext()) {
