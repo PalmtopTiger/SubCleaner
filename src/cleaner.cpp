@@ -79,15 +79,11 @@ void Cleaner::run()
             QString("YCbCr Matrix").toLower()
         };
 
-        QMutableListIterator<Script::Line::Named*> lineIt(script.header.content);
-        while (lineIt.hasNext()) {
-            const Script::Line::Named* const line = lineIt.next();
-            if ( !importantLines.contains(line->name().toLower()) )
-            {
-                lineIt.remove();
-                delete line;
-            }
-        }
+        auto isUnimportant = [importantLines](const Script::Line::Named* const line) {
+            return !importantLines.contains(line->name().toLower());
+        };
+        script.header.content.erase(std::remove_if(script.header.content.begin(), script.header.content.end(), isUnimportant),
+                                    script.header.content.end());
     }
 
     // Strip fonts and graphics
