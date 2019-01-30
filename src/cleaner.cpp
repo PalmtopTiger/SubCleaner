@@ -104,23 +104,11 @@ void Cleaner::run()
     switch (scriptType)
     {
     case Script::SCR_SSA:
-        if ( !Script::GenerateSSA(outputStream, script) )
-        {
-            _outputFile.close();
-            fprintf(stderr, "%s\n", qPrintable(QString("SSA output error.").arg(_inputFile.fileName())));
-            QCoreApplication::exit(EXIT_FAILURE);
-            return;
-        }
+        Script::GenerateSSA(outputStream, script);
         break;
 
     case Script::SCR_ASS:
-        if ( !Script::GenerateASS(outputStream, script) )
-        {
-            _outputFile.close();
-            fprintf(stderr, "%s\n", qPrintable(QString("ASS output error.").arg(_inputFile.fileName())));
-            QCoreApplication::exit(EXIT_FAILURE);
-            return;
-        }
+        Script::GenerateASS(outputStream, script);
         break;
 
     default:
